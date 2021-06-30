@@ -209,6 +209,7 @@ int main(int argc, const char * argv[]) {
         glm::vec3( 1.5f,  0.2f,  -1.5f),
         glm::vec3(-1.3f,  1.0f,  -1.5f)
     };
+    glm::vec3 lightPosition(1.0f, 1.0f, 2.0f);
     
     unsigned int VAO, VBO, lightVAO;
     
@@ -265,13 +266,17 @@ int main(int argc, const char * argv[]) {
         cubeProgram.setValue("projection", projection);
         cubeProgram.setValue("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
         cubeProgram.setValue("lightColor", glm::vec3(1.0f));
+        cubeProgram.setValue("cameraPos", camera.getPosition());
         cubeProgram.setValue("material.diffuse", 0);
         cubeProgram.setValue("material.specular", 1);
         cubeProgram.setValue("material.shininess", 32.0f);
-        cubeProgram.setValue("light.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
+        cubeProgram.setValue("light.position", lightPosition);
         cubeProgram.setValue("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
         cubeProgram.setValue("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
         cubeProgram.setValue("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+        cubeProgram.setValue("light.constant", 1.0f);
+        cubeProgram.setValue("light.linear", 0.09f);
+        cubeProgram.setValue("light.quadratic", 0.032f);
         
         boxTexture.bind(GL_TEXTURE0);
         boxSpecTex.bind(GL_TEXTURE1);
@@ -287,6 +292,20 @@ int main(int argc, const char * argv[]) {
             
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
+        
+        glm::mat4 lightModel(1.0f);
+        lightModel = glm::translate(lightModel, lightPosition);
+        lightModel = glm::scale(lightModel, glm::vec3(0.2f));
+        
+        lightProgram.use();
+        
+        lightProgram.setValue("model", lightModel);
+        lightProgram.setValue("view", view);
+        lightProgram.setValue("projection", projection);
+        lightProgram.setValue("lightColor", glm::vec3(1.0f));
+        
+        glBindVertexArray(lightVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
         
         glfwPollEvents();
         glfwSwapBuffers(window);
