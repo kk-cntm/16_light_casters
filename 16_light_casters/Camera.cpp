@@ -116,3 +116,7 @@ glm::mat4 Camera::view() {
 glm::vec3 Camera::getPosition() {
     return m_position;
 }
+
+glm::vec3 Camera::getDirection() {
+    return m_direction;
+}

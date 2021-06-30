@@ -270,7 +270,10 @@ int main(int argc, const char * argv[]) {
         cubeProgram.setValue("material.diffuse", 0);
         cubeProgram.setValue("material.specular", 1);
         cubeProgram.setValue("material.shininess", 32.0f);
-        cubeProgram.setValue("light.position", lightPosition);
+        cubeProgram.setValue("light.position", camera.getPosition());
+        cubeProgram.setValue("light.direction", camera.getDirection());
+        cubeProgram.setValue("light.cutOff", glm::cos(glm::radians(12.5f)));
+        cubeProgram.setValue("light.outerCutOff", glm::cos(glm::radians(50.0f)));
         cubeProgram.setValue("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
         cubeProgram.setValue("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
         cubeProgram.setValue("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
